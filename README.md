@@ -17,3 +17,7 @@ Additionally, direct access to background player window is added to an in-app me
 Not so long ago, NewPipe project implemented a new UI elements for video streams. Personally, I didn't like that change. I wanted to keep using the old UI instead.
 
 Another thing with NewPipe is that, you can't access background player from the in-app menus (at least in the old app version). This is an issue with [Anbox](https://github.com/anbox/anbox) because there is no way to access the player controls due to lack of missing Android top-bar (can't swipe) and the Anbox implementation relies on the fact that for each application it renders an independent, single application window. Thus, implementing a way to access background player from the in-app menus works around this issue.
+
+## Screenshots
+
+`<todo>`
