@@ -12,6 +12,8 @@ NewPipe version 0.19.8 in this repository uses the current version of NewPipeExt
 
 Additionally, direct access to background player window is added to an in-app menu.
 
+Original NewPipe 0.19.8: [GitHub - TeamNewPipe/NewPipe 0.19.8](https://github.com/TeamNewPipe/NewPipe/releases/tag/v0.19.8)
+
 ## Motivation
 
 Not so long ago, NewPipe project implemented a new UI elements for video streams. Personally, I didn't like that change. I wanted to keep using the old UI instead.
