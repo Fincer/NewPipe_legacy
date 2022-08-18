@@ -25,7 +25,6 @@ import org.schabi.newpipe.R;
 import org.schabi.newpipe.database.playlist.model.PlaylistRemoteEntity;
 import org.schabi.newpipe.extractor.InfoItem;
 import org.schabi.newpipe.extractor.ListExtractor;
-import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.extractor.exceptions.ExtractionException;
 import org.schabi.newpipe.extractor.playlist.PlaylistInfo;
 import org.schabi.newpipe.extractor.stream.StreamInfoItem;
@@ -41,6 +40,7 @@ import org.schabi.newpipe.util.ExtractorHelper;
 import org.schabi.newpipe.util.ImageDisplayConstants;
 import org.schabi.newpipe.util.Localization;
 import org.schabi.newpipe.util.NavigationHelper;
+import org.schabi.newpipe.util.ServiceHelper;
 import org.schabi.newpipe.util.ShareUtils;
 import org.schabi.newpipe.util.StreamDialogEntry;
 import org.schabi.newpipe.util.ThemeHelper;
@@ -308,7 +308,7 @@ public class PlaylistFragment extends BaseListInfoFragment<PlaylistInfo> {
 
         if (!result.getErrors().isEmpty()) {
             showSnackBarError(result.getErrors(), UserAction.REQUESTED_PLAYLIST,
-                    NewPipe.getNameOfService(result.getServiceId()), result.getUrl(), 0);
+                    ServiceHelper.getNameOfServiceById(result.getServiceId()), result.getUrl(), 0);
         }
 
         remotePlaylistManager.getPlaylist(result)
@@ -361,7 +361,7 @@ public class PlaylistFragment extends BaseListInfoFragment<PlaylistInfo> {
 
         if (!result.getErrors().isEmpty()) {
             showSnackBarError(result.getErrors(), UserAction.REQUESTED_PLAYLIST,
-                    NewPipe.getNameOfService(serviceId), "Get next page of: " + url, 0);
+                    ServiceHelper.getNameOfServiceById(serviceId), "Get next page of: " + url, 0);
         }
     }
 
@@ -378,7 +378,7 @@ public class PlaylistFragment extends BaseListInfoFragment<PlaylistInfo> {
         int errorId = exception instanceof ExtractionException
                 ? R.string.parsing_error : R.string.general_error;
         onUnrecoverableError(exception, UserAction.REQUESTED_PLAYLIST,
-                NewPipe.getNameOfService(serviceId), url, errorId);
+                ServiceHelper.getNameOfServiceById(serviceId), url, errorId);
         return true;
     }
 

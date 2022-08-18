@@ -84,6 +84,7 @@ import org.schabi.newpipe.util.ListHelper;
 import org.schabi.newpipe.util.Localization;
 import org.schabi.newpipe.util.NavigationHelper;
 import org.schabi.newpipe.util.PermissionHelper;
+import org.schabi.newpipe.util.ServiceHelper;
 import org.schabi.newpipe.util.ShareUtils;
 import org.schabi.newpipe.util.StreamItemAdapter;
 import org.schabi.newpipe.util.StreamItemAdapter.StreamSizeWrapper;
@@ -618,7 +619,7 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo>
     private void initThumbnailViews(@NonNull final StreamInfo info) {
         thumbnailImageView.setImageResource(R.drawable.dummy_thumbnail_dark);
         if (!TextUtils.isEmpty(info.getThumbnailUrl())) {
-            final String infoServiceName = NewPipe.getNameOfService(info.getServiceId());
+            final String infoServiceName = ServiceHelper.getNameOfServiceById(info.getServiceId());
             final ImageLoadingListener onFailListener = new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingFailed(final String imageUri, final View view,
@@ -1261,7 +1262,7 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo>
         if (!info.getErrors().isEmpty()) {
             showSnackBarError(info.getErrors(),
                     UserAction.REQUESTED_STREAM,
-                    NewPipe.getNameOfService(info.getServiceId()),
+                    ServiceHelper.getNameOfServiceById(info.getServiceId()),
                     info.getUrl(),
                     0);
         }
@@ -1371,7 +1372,7 @@ public class VideoDetailFragment extends BaseStateFragment<StreamInfo>
                         : R.string.general_error;
 
         onUnrecoverableError(exception, UserAction.REQUESTED_STREAM,
-                NewPipe.getNameOfService(serviceId), url, errorId);
+                ServiceHelper.getNameOfServiceById(serviceId), url, errorId);
 
         return true;
     }

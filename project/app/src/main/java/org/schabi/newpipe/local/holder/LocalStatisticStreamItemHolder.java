@@ -12,12 +12,12 @@ import org.schabi.newpipe.R;
 import org.schabi.newpipe.database.LocalItem;
 import org.schabi.newpipe.database.stream.StreamStatisticsEntry;
 import org.schabi.newpipe.database.stream.model.StreamStateEntity;
-import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.local.LocalItemBuilder;
 import org.schabi.newpipe.local.history.HistoryRecordManager;
 import org.schabi.newpipe.util.AnimationUtils;
 import org.schabi.newpipe.util.ImageDisplayConstants;
 import org.schabi.newpipe.util.Localization;
+import org.schabi.newpipe.util.ServiceHelper;
 import org.schabi.newpipe.views.AnimatedProgressBar;
 
 import java.text.DateFormat;
@@ -75,7 +75,7 @@ public class LocalStatisticStreamItemHolder extends LocalItemHolder {
         final String watchCount = Localization
                 .shortViewCount(itemBuilder.getContext(), entry.getWatchCount());
         final String uploadDate = dateFormat.format(entry.getLatestAccessDate());
-        final String serviceName = NewPipe.getNameOfService(entry.getStreamEntity().getServiceId());
+        final String serviceName = ServiceHelper.getNameOfServiceById(entry.getStreamEntity().getServiceId());
         return Localization.concatenateStrings(watchCount, uploadDate, serviceName);
     }
 
