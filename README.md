@@ -22,4 +22,5 @@ Another thing with NewPipe is that, you can't access background player from the 
 
 ## Screenshots
 
-`<todo>`
+[<img src="images/newpipe_phone.png" width=160>](images/newpipe_phone.png)
+[<img src="images/newpipe_tablet.png" width=405>](images/newpipe_tablet.png)
