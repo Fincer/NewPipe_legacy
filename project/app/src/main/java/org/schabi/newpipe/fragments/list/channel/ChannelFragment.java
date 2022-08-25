@@ -505,7 +505,9 @@ public class ChannelFragment extends BaseListInfoFragment<ChannelInfo>
 
             if (!errors.isEmpty()) {
                 showSnackBarError(errors, UserAction.REQUESTED_CHANNEL,
-                        ServiceHelper.getNameOfServiceById(result.getServiceId()), result.getUrl(), 0);
+                        ServiceHelper.getNameOfServiceById(result.getServiceId()),
+                        result.getUrl(), 0
+                );
             }
         }
 

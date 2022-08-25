@@ -127,7 +127,8 @@ public class CommentsFragment extends BaseListInfoFragment<CommentsInfo> {
 
         hideLoading();
         showSnackBarError(exception, UserAction.REQUESTED_COMMENTS,
-                ServiceHelper.getNameOfServiceById(serviceId), url, R.string.error_unable_to_load_comments);
+                ServiceHelper.getNameOfServiceById(serviceId),
+                url, R.string.error_unable_to_load_comments);
         return true;
     }
 
