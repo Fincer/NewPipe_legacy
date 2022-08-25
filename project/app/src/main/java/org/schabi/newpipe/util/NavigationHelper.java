@@ -146,8 +146,13 @@ public final class NavigationHelper {
 
     public static void playOnBackgroundPlayer(final Context context, final PlayQueue queue,
                                               final boolean resumePlayback) {
-        Toast.makeText(context, R.string.background_player_playing_toast, Toast.LENGTH_SHORT)
-                .show();
+        //Toast.makeText(context, R.string.background_player_playing_toast, Toast.LENGTH_SHORT)
+        //        .show();
+        final Intent playerIntent
+                = getPlayerIntent(context, BackgroundPlayerActivity.class, queue, resumePlayback);
+        playerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(playerIntent);
+
         startService(context,
                 getPlayerIntent(context, BackgroundPlayer.class, queue, resumePlayback));
     }
@@ -479,6 +484,11 @@ public final class NavigationHelper {
         mIntent.setData(Uri.parse(url));
         mIntent.putExtra(RouterActivity.INTERNAL_ROUTE_KEY, true);
         context.startActivity(mIntent);
+    }
+
+    public static void openBackgroundPlayer(final Context context) {
+        Intent intent = new Intent(context, BackgroundPlayerActivity.class);
+        context.startActivity(intent);
     }
 
     public static void openAbout(final Context context) {
