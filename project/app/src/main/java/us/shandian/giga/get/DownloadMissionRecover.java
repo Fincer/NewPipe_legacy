@@ -145,7 +145,7 @@ public class DownloadMissionRecover extends Thread {
                 else
                     videoStreams = mExtractor.getVideoStreams();
                 for (VideoStream video : videoStreams) {
-                    if (video.resolution.equals(mRecovery.desired) && video.getFormat() == mRecovery.format) {
+                    if (video.getResolution().equals(mRecovery.desired) && video.getFormat() == mRecovery.format) {
                         url = video.getContent();
                         break;
                     }
