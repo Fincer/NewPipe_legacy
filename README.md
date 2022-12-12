@@ -24,3 +24,13 @@ Another thing with NewPipe is that, you can't access background player from the 
 
 [<img src="images/newpipe_phone.png" width=160>](images/newpipe_phone.png)
 [<img src="images/newpipe_tablet.png" width=405>](images/newpipe_tablet.png)
+
+----------
+
+## Android 8 or newer required
+
+NewPipeExtractor has Java class dependency `java.time.temporal.ChronoUnit` ([link](https://github.com/TeamNewPipe/NewPipeExtractor/search?q=java.time.temporal.ChronoUnit)) which requires Android API level 26 or newer (Android 8 or newer). This means the application *does not* work on older Android versions anymore. On older Android devices, you get the following error instead while running the application:
+
+```
+10-24 17:49:28.377  1092  1115 E class org.schabi.newpipe.App: Caused by: java.lang.ClassNotFoundException: Didn't find class "java.time.temporal.ChronoUnit" on path: DexPathList[[zip file "/data/app/org.schabi.newpipe-1/base.apk"],nativeLibraryDirectories=[/data/app/org.schabi.newpipe-1/lib/x86_64, /system/lib64, /vendor/lib64]]
+```
