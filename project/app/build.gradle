@@ -11,10 +11,12 @@ android {
     defaultConfig {
         applicationId "org.schabi.newpipe"
         resValue "string", "app_name", "NewPipe"
-        minSdkVersion 24
+        minSdkVersion 19
         targetSdkVersion 29
         versionCode 953
         versionName "0.19.8"
+
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -33,7 +35,7 @@ android {
 
             // suffix the app id and the app name with git branch name
             def workingBranch = getGitWorkingBranch()
-            def normalizedWorkingBranch = workingBranch.replaceAll("[^A-Za-z]+", "").toLowerCase()
+            def normalizedWorkingBranch = workingBranch.replaceFirst("^[^A-Za-z]+", "").replaceAll("[^0-9A-Za-z]+", "")
             if (normalizedWorkingBranch.isEmpty() || workingBranch == "master" || workingBranch == "dev") {
                 // default values when branch name could not be determined or is master or dev
                 applicationIdSuffix ".debug"
@@ -61,12 +63,23 @@ android {
         // Or, if you prefer, you can continue to check for errors in release builds,
         // but continue the build even when errors are found:
         abortOnError false
+        // suppress false warning ("Resource IDs will be non-final in Android Gradle Plugin version
+        // 5.0, avoid using them in switch case statements"), which affects only library projects
+        disable 'NonConstantResourceId'
     }
 
     compileOptions {
+
+        // Flag to enable support for the new language APIs for API<24
++        coreLibraryDesugaringEnabled true
+
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
         encoding 'utf-8'
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
     }
 
     // Required and used only by groupie
@@ -81,14 +94,14 @@ android {
 
 ext {
     icepickVersion = '3.2.0'
-    checkstyleVersion = '8.32'
+    checkstyleVersion = '8.38'
     stethoVersion = '1.5.1'
-    leakCanaryVersion = '2.2'
-    exoPlayerVersion = '2.11.6'
+    leakCanaryVersion = '2.5'
+    exoPlayerVersion = '2.11.8'
     androidxLifecycleVersion = '2.2.0'
     androidxRoomVersion = '2.2.5'
     groupieVersion = '2.8.0'
-    markwonVersion = '4.3.1'
+    markwonVersion = '4.6.0'
 }
 
 configurations {
@@ -138,13 +151,15 @@ afterEvaluate {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+/** Desugaring **/
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     implementation "frankiesardo:icepick:${icepickVersion}"
     kapt "frankiesardo:icepick-processor:${icepickVersion}"
 
     checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
-    ktlint "com.pinterest:ktlint:0.35.0"
+    ktlint "com.pinterest:ktlint:0.40.0"
 
     debugImplementation "com.facebook.stetho:stetho:${stethoVersion}"
     debugImplementation "com.facebook.stetho:stetho-okhttp3:${stethoVersion}"
@@ -152,23 +167,28 @@ dependencies {
     debugImplementation "com.squareup.leakcanary:leakcanary-android:${leakCanaryVersion}"
     implementation "com.squareup.leakcanary:leakcanary-object-watcher-android:${leakCanaryVersion}"
 
-    debugImplementation "androidx.multidex:multidex:2.0.1"
+    implementation "androidx.multidex:multidex:2.0.1"
 
     testImplementation 'junit:junit:4.13'
     testImplementation 'org.mockito:mockito-core:3.3.3'
 
     androidTestImplementation "androidx.test.ext:junit:1.1.1"
     androidTestImplementation "androidx.room:room-testing:${androidxRoomVersion}"
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0", {
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0", {
         exclude module: 'support-annotations'
     }
 
-    implementation 'com.github.TeamNewPipe:NewPipeExtractor:9ffdd0948b2ecd82655f5ff2a3e127b2b7695d5b'
+/** NewPipe libraries **/
 
+    implementation 'com.github.Jtfk:NewPipeExtractor-j8:0.22.7-j8'
     implementation "com.github.TeamNewPipe:nanojson:1d9e1aea9049fc9f85e68b43ba39fe7be1c1f751"
+
+/** Third-party libraries **/
     implementation "org.jsoup:jsoup:1.13.1"
 
-    implementation "com.squareup.okhttp3:okhttp:3.12.11"
+    // HTTP client
+    //noinspection GradleDependency --> do not update okhttp beyond 3.12.x to keep supporting Android 4.4 users
+    implementation "com.squareup.okhttp3:okhttp:3.12.13"
 
     implementation "com.google.android.exoplayer:exoplayer:${exoPlayerVersion}"
     implementation "com.google.android.exoplayer:extension-mediasession:${exoPlayerVersion}"
@@ -206,7 +226,7 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
     implementation "com.jakewharton.rxbinding2:rxbinding:2.2.0"
 
-    implementation "org.ocpsoft.prettytime:prettytime:4.0.5.Final"
+    implementation "org.ocpsoft.prettytime:prettytime:5.0.6.Final"
 }
 
 static String getGitWorkingBranch() {
