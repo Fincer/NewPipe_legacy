@@ -35,7 +35,7 @@ android {
 
             // suffix the app id and the app name with git branch name
             def workingBranch = getGitWorkingBranch()
-            def normalizedWorkingBranch = workingBranch.replaceAll("[^A-Za-z]+", "").toLowerCase()
+            def normalizedWorkingBranch = workingBranch.replaceFirst("^[^A-Za-z]+", "").replaceAll("[^0-9A-Za-z]+", "")
             if (normalizedWorkingBranch.isEmpty() || workingBranch == "master" || workingBranch == "dev") {
                 // default values when branch name could not be determined or is master or dev
                 applicationIdSuffix ".debug"
@@ -63,6 +63,9 @@ android {
         // Or, if you prefer, you can continue to check for errors in release builds,
         // but continue the build even when errors are found:
         abortOnError false
+        // suppress false warning ("Resource IDs will be non-final in Android Gradle Plugin version
+        // 5.0, avoid using them in switch case statements"), which affects only library projects
+        disable 'NonConstantResourceId'
     }
 
     compileOptions {
@@ -148,6 +151,7 @@ afterEvaluate {
 }
 
 dependencies {
+/** Desugaring **/
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
@@ -174,11 +178,16 @@ dependencies {
         exclude module: 'support-annotations'
     }
 
-    implementation 'com.github.TeamNewPipe:NewPipeExtractor:9ffdd0948b2ecd82655f5ff2a3e127b2b7695d5b'
+/** NewPipe libraries **/
 
+    implementation 'com.github.Jtfk:NewPipeExtractor-j8:0.22.7-j8'
     implementation "com.github.TeamNewPipe:nanojson:1d9e1aea9049fc9f85e68b43ba39fe7be1c1f751"
+
+/** Third-party libraries **/
     implementation "org.jsoup:jsoup:1.13.1"
 
+    // HTTP client
+    //noinspection GradleDependency --> do not update okhttp beyond 3.12.x to keep supporting Android 4.4 users
     implementation "com.squareup.okhttp3:okhttp:3.12.13"
 
     implementation "com.google.android.exoplayer:exoplayer:${exoPlayerVersion}"
